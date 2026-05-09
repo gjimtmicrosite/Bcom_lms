@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>User Accounts — GJIMT BCom AI LMS</title>
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#f4f6fb;
+    color:#1a1a2e
+  }
+
+  header{
+    background:linear-gradient(135deg,#14532d,#166534);
+    color:#fff;
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    gap:16px
+  }
+
+  header h1{
+    font-size:1.4rem;
+    font-weight:700
+  }
+
+  header p{
+    font-size:.82rem;
+    opacity:.85
+  }
+
+  nav{
+    background:#166534;
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px;
+    padding:8px 32px
+  }
+
+  nav a{
+    color:#e0e0e0;
+    text-decoration:none;
+    padding:6px 14px;
+    border-radius:4px;
+    font-size:.85rem;
+    transition:.2s
+  }
+
+  nav a:hover,
+  nav a.active{
+    background:#14532d;
+    color:#fff
+  }
+
+  .container{
+    max-width:1000px;
+    margin:28px auto;
+    padding:0 20px
+  }
+
+  .card{
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    padding:24px;
+    margin-bottom:20px
+  }
+
+  .card h2{
+    color:#14532d;
+    margin-bottom:12px;
+    font-size:1.1rem
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.88rem
+  }
+
+  th{
+    background:#14532d;
+    color:#fff;
+    padding:9px 12px;
+    text-align:left
+  }
+
+  td{
+    padding:8px 12px;
+    border-bottom:1px solid #eee;
+    vertical-align:middle
+  }
+
+  tr:hover td{
+    background:#f0fff4
+  }
+
+  .badge{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:12px;
+    font-size:.75rem;
+    font-weight:600
+  }
+
+  .badge-student{
+    background:#dcfce7;
+    color:#166534
+  }
+
+  .badge-faculty{
+    background:#dbeafe;
+    color:#1d4ed8
+  }
+
+  .badge-admin{
+    background:#fef3c7;
+    color:#b45309
+  }
+
+  .btn{
+    display:inline-block;
+    padding:8px 18px;
+    background:#14532d;
+    color:#fff;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:.85rem;
+    margin:4px 2px;
+    border:none;
+    cursor:pointer;
+    transition:.2s
+  }
+
+  .btn:hover{
+    background:#166534
+  }
+
+  .btn-red{
+    background:#dc2626
+  }
+
+  .btn-red:hover{
+    background:#b91c1c
+  }
+
+  .hint{
+    font-size:.8rem;
+    color:#777;
+    margin-top:5px
+  }
+
+  .pwd{
+    font-family:monospace;
+    background:#f5f5f5;
+    padding:2px 7px;
+    border-radius:4px;
+    color:#b91c1c;
+    font-size:.85rem
+  }
+
+  .login-wrap{
+    min-height:80vh;
+    display:flex;
+    align-items:center;
+    justify-content:center
+  }
+
+  .login-card{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 24px rgba(0,0,0,.12);
+    padding:40px 36px;
+    width:100%;
+    max-width:420px;
+    text-align:center
+  }
+
+  .login-card h2{
+    color:#14532d;
+    margin-bottom:6px
+  }
+
+  .login-card p{
+    font-size:.85rem;
+    color:#666;
+    margin-bottom:24px
+  }
+
+  .login-card input{
+    width:100%;
+    padding:11px 14px;
+    border:1.5px solid #ccc;
+    border-radius:7px;
+    font-size:.95rem;
+    margin-bottom:14px;
+    outline:none
+  }
+
+  .login-card input:focus{
+    border-color:#14532d
+  }
+
+  .login-card button{
+    width:100%;
+    padding:12px;
+    background:#14532d;
+    color:#fff;
+    border:none;
+    border-radius:7px;
+    font-size:1rem;
+    cursor:pointer
+  }
+
+  .login-card button:hover{
+    background:#166534
+  }
+
+  .error-msg{
+    color:#dc2626;
+    font-size:.85rem;
+    margin-top:8px;
+    display:none
+  }
+
+  #dashboard{
+    display:none
+  }
+
+  .dash-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-top:14px
+  }
+
+  .dash-tile{
+    background:#f8fff9;
+    border:1px solid #d1fae5;
+    border-radius:10px;
+    padding:18px;
+    text-align:center;
+    text-decoration:none;
+    color:inherit;
+    transition:.2s
+  }
+
+  .dash-tile:hover{
+    background:#dcfce7
+  }
+
+  .dash-tile .icon{
+    font-size:2rem;
+    margin-bottom:8px
+  }
+
+  .dash-tile h3{
+    font-size:.9rem;
+    color:#14532d
+  }
+
+  .dash-tile p{
+    font-size:.78rem;
+    color:#777;
+    margin-top:4px
+  }
+
+  .user-banner{
+    background:linear-gradient(135deg,#14532d,#166534);
+    color:#fff;
+    border-radius:10px;
+    padding:18px 22px;
+    margin-bottom:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+  }
+
+  .progress-bar{
+    background:#e5e7eb;
+    border-radius:6px;
+    height:8px;
+    margin-top:6px
+  }
+
+  .progress-fill{
+    background:#22c55e;
+    border-radius:6px;
+    height:8px
+  }
+
+  #adminPanel{
+    display:none
+  }
+
+  footer{
+    text-align:center;
+    padding:18px;
+    font-size:.8rem;
+    color:#888;
+    margin-top:30px
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>GJIMT AI Lab — BCom Sem 1 LMS</h1>
+    <p>BCom with AI Integration · 42-Hour Program · Aug–Nov 2026 · Batch of 10</p>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">🏠 Home</a>
+  <a href="calendar.html">📅 42-Hour Calendar</a>
+  <a href="projects.html">📁 Commerce Projects</a>
+  <a href="mock.html">📝 AI Mock Tests</a>
+  <a href="faculty.html">👩‍🏫 Faculty Dashboard</a>
+  <a href="users.html" class="active">🔑 User Accounts</a>
+</nav>
+
+<!-- LOGIN -->
+<div id="loginSection" class="login-wrap">
+  <div class="login-card">
+    <div style="font-size:2.4rem;margin-bottom:8px">🔐</div>
+
+    <h2>GJIMT BCom AI LMS</h2>
+
+    <p>BCom with AI Integration · 2026</p>
+
+    <input id="uid" type="text" placeholder="User ID (e.g. bcom26-ai-01)">
+    <input id="pwd" type="password" placeholder="Password">
+
+    <button onclick="doLogin()">Login →</button>
+
+    <div id="errMsg" class="error-msg"></div>
+
+    <p class="hint" style="margin-top:16px">
+      Contact <strong>bcom26-fac-commerce</strong> if you cannot login.
+    </p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="container">
+
+  <div id="dColor" class="user-banner">
+    <div>
+      <h3 id="dName">—</h3>
+      <p>
+        Role:
+        <strong id="dRole">—</strong>
+        &nbsp;|&nbsp;
+        ID:
+        <strong id="dUID">—</strong>
+      </p>
+    </div>
+
+    <button class="btn btn-red" onclick="doLogout()">Logout</button>
+  </div>
+
+  <div class="card">
+    <h2>📊 My Semester Progress</h2>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progFill" style="width:0%"></div>
+    </div>
+
+    <p style="margin-top:8px">
+      Completed:
+      <strong id="progPct">0%</strong>
+      of 42 hours
+    </p>
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="badge badge-student">P1: Accounting Analysis</span>
+      <span class="badge badge-student">P2: GST & Taxation</span>
+      <span class="badge badge-student">P3: Retail Business Study</span>
+      <span class="badge badge-student">P4: Financial Dashboard</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🚀 Quick Access</h2>
+
+    <div class="dash-grid" id="dashGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Semester Schedule</h2>
+
+    <table>
+      <tr>
+        <th>Week</th>
+        <th>Commerce Activity</th>
+        <th>Status</th>
+      </tr>
+
+      <tr>
+        <td>1–2</td>
+        <td>P1 — Accounting & Ledger Analysis</td>
+        <td><span class="badge badge-student">Upcoming</span></td>
+      </tr>
+
+      <tr>
+        <td>3–4</td>
+        <td>P2 — GST & Tax Workflow</td>
+        <td><span class="badge badge-student">Upcoming</span></td>
+      </tr>
+
+      <tr>
+        <td>5–6</td>
+        <td>P3 — Retail Store Business Study</td>
+        <td><span class="badge badge-student">Upcoming</span></td>
+      </tr>
+
+      <tr>
+        <td>7–8</td>
+        <td>P4 — Excel & Power BI Dashboard</td>
+        <td><span class="badge badge-student">Upcoming</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="container">
+
+  <div class="card">
+    <h2>🔑 All User Accounts — Admin View</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Password</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+
+      <tbody id="adminRows"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const USERS = {
+
+  "bcom26-ai-01": {
+    name:"Student 01",
+    password:"Bcom@01Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-02": {
+    name:"Student 02",
+    password:"Bcom@02Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-03": {
+    name:"Student 03",
+    password:"Bcom@03Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-04": {
+    name:"Student 04",
+    password:"Bcom@04Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-05": {
+    name:"Student 05",
+    password:"Bcom@05Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-06": {
+    name:"Student 06",
+    password:"Bcom@06Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-07": {
+    name:"Student 07",
+    password:"Bcom@07Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-08": {
+    name:"Student 08",
+    password:"Bcom@08Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-09": {
+    name:"Student 09",
+    password:"Bcom@09Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-ai-10": {
+    name:"Student 10",
+    password:"Bcom@10Ai",
+    role:"student",
+    progress:0
+  },
+
+  "bcom26-fac-commerce": {
+    name:"Commerce Faculty",
+    password:"Bcom@Faculty26",
+    role:"faculty",
+    progress:100
+  },
+
+  "bcom26-admin": {
+    name:"Admin Coordinator",
+    password:"Bcom@Admin26",
+    role:"admin",
+    progress:100
+  }
+};
+
+const ROLE_LINKS = {
+
+  student: [
+    {
+      icon:"📅",
+      title:"42-Hour Calendar",
+      sub:"Weekly roadmap",
+      href:"calendar.html"
+    },
+
+    {
+      icon:"📁",
+      title:"Commerce Projects",
+      sub:"AI integrated projects",
+      href:"projects.html"
+    },
+
+    {
+      icon:"📝",
+      title:"AI Mock Tests",
+      sub:"Weekly practice tests",
+      href:"mock.html"
+    },
+
+    {
+      icon:"📚",
+      title:"Upload Guide",
+      sub:"Submission instructions",
+      href:"upload-guide.html"
+    }
+  ],
+
+  faculty: [
+    {
+      icon:"👩‍🏫",
+      title:"Faculty Dashboard",
+      sub:"Rubrics & evaluation",
+      href:"faculty.html"
+    },
+
+    {
+      icon:"📁",
+      title:"Commerce Projects",
+      sub:"Student projects",
+      href:"projects.html"
+    }
+  ],
+
+  admin: [
+    {
+      icon:"👩‍🏫",
+      title:"Faculty Dashboard",
+      sub:"Manage semester",
+      href:"faculty.html"
+    },
+
+    {
+      icon:"🔑",
+      title:"All Users",
+      sub:"Account management",
+      href:"#adminPanel"
+    }
+  ]
+};
+
+const ROLE_COLORS = {
+  student:"#14532d",
+  faculty:"#1d4ed8",
+  admin:"#b45309"
+};
+
+const ROLE_BADGE = {
+  student:"badge-student",
+  faculty:"badge-faculty",
+  admin:"badge-admin"
+};
+
+function doLogin(){
+
+  const uid=document.getElementById('uid').value.trim();
+  const pwd=document.getElementById('pwd').value.trim();
+  const err=document.getElementById('errMsg');
+
+  if(!USERS[uid] || USERS[uid].password!==pwd){
+    err.style.display='block';
+    err.textContent='❌ Incorrect User ID or Password';
+    return;
+  }
+
+  const u=USERS[uid];
+
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+
+  document.getElementById('dName').textContent=u.name;
+  document.getElementById('dRole').textContent=u.role;
+  document.getElementById('dUID').textContent=uid;
+
+  document.getElementById('dColor').style.background =
+    'linear-gradient(135deg,'+ROLE_COLORS[u.role]+',#166534)';
+
+  const prog = parseInt(localStorage.getItem('prog_'+uid)||'0');
+
+  document.getElementById('progFill').style.width = prog+'%';
+  document.getElementById('progPct').textContent = prog+'%';
+
+  const grid=document.getElementById('dashGrid');
+  grid.innerHTML='';
+
+  ROLE_LINKS[u.role].forEach(l=>{
+    grid.innerHTML += `
+      <a class="dash-tile" href="${l.href}">
+        <div class="icon">${l.icon}</div>
+        <h3>${l.title}</h3>
+        <p>${l.sub}</p>
+      </a>
+    `;
+  });
+
+  if(u.role==='admin'){
+    buildAdminPanel();
+    document.getElementById('adminPanel').style.display='block';
+  }
+}
+
+function buildAdminPanel(){
+
+  let rows='';
+
+  for(const [uid,u] of Object.entries(USERS)){
+
+    rows += `
+      <tr>
+        <td>${uid}</td>
+        <td>${u.name}</td>
+        <td>
+          <span class="badge ${ROLE_BADGE[u.role]}">
+            ${u.role}
+          </span>
+        </td>
+        <td class="pwd">${u.password}</td>
+        <td>${u.progress}%</td>
+      </tr>
+    `;
+  }
+
+  document.getElementById('adminRows').innerHTML = rows;
+}
+
+function doLogout(){
+
+  document.getElementById('loginSection').style.display='flex';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('adminPanel').style.display='none';
+
+  document.getElementById('uid').value='';
+  document.getElementById('pwd').value='';
+}
+
+document.addEventListener('keydown',function(e){
+
+  if(
+    e.key==='Enter' &&
+    document.getElementById('loginSection').style.display!=='none'
+  ){
+    doLogin();
+  }
+});
+</script>
+
+<footer>
+  © 2026 GJIMT AI Lab · BCom AI Integrated Program · Powered by GitHub Pages
+</footer>
+
+</body>
+</html>

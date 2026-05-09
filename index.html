@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GJIMT AI Lab LMS — B.Com(Hons) with AI Integration</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:#f4f6fb;
+  color:#1a1a2e;
+}
+
+header{
+  background:linear-gradient(135deg,#0f3460,#16213e);
+  color:#fff;
+  padding:18px 32px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+header h1{
+  font-size:1.45rem;
+  font-weight:700;
+}
+
+header p{
+  font-size:.84rem;
+  opacity:.85;
+  margin-top:4px;
+}
+
+nav{
+  background:#16213e;
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  padding:8px 32px;
+}
+
+nav a{
+  color:#e0e0e0;
+  text-decoration:none;
+  padding:7px 14px;
+  border-radius:5px;
+  font-size:.85rem;
+  transition:.2s;
+}
+
+nav a:hover,
+nav a.active{
+  background:#0f3460;
+  color:#fff;
+}
+
+.container{
+  max-width:1150px;
+  margin:28px auto;
+  padding:0 20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  padding:24px;
+  margin-bottom:22px;
+}
+
+.card h2{
+  color:#0f3460;
+  margin-bottom:14px;
+  font-size:1.15rem;
+}
+
+.card h3{
+  color:#16213e;
+  margin:14px 0 8px;
+  font-size:1rem;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.89rem;
+}
+
+th{
+  background:#0f3460;
+  color:#fff;
+  padding:10px;
+  text-align:left;
+}
+
+td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+}
+
+tr:hover td{
+  background:#f7f9ff;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  margin-top:18px;
+}
+
+.quick-card{
+  background:#f8f9ff;
+  border:1px solid #dde3f0;
+  border-radius:12px;
+  padding:22px;
+  text-align:center;
+  text-decoration:none;
+  color:inherit;
+  transition:.25s;
+}
+
+.quick-card:hover{
+  transform:translateY(-4px);
+  border-color:#0f3460;
+  background:#eef4ff;
+}
+
+.quick-card .icon{
+  font-size:2.2rem;
+  margin-bottom:10px;
+}
+
+.quick-card h3{
+  color:#0f3460;
+  margin-bottom:6px;
+}
+
+.quick-card p{
+  font-size:.82rem;
+  color:#666;
+}
+
+.badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:14px;
+  font-size:.74rem;
+  font-weight:600;
+}
+
+.badge-proj{
+  background:#e3f2fd;
+  color:#0f3460;
+}
+
+.badge-ai{
+  background:#e8f5e9;
+  color:#1b5e20;
+}
+
+.badge-gsdc{
+  background:#fff3e0;
+  color:#ef6c00;
+}
+
+.phase-box{
+  border-left:4px solid #0f3460;
+  background:#f8f9ff;
+  padding:12px 16px;
+  border-radius:0 8px 8px 0;
+  margin:10px 0;
+}
+
+.phase-box.ai{
+  border-color:#2e7d32;
+}
+
+.phase-box.finance{
+  border-color:#e65100;
+}
+
+ul{
+  padding-left:20px;
+  margin-top:8px;
+}
+
+li{
+  margin:6px 0;
+  font-size:.92rem;
+}
+
+.btn{
+  display:inline-block;
+  padding:9px 18px;
+  background:#0f3460;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  font-size:.85rem;
+  margin:4px 6px 4px 0;
+  transition:.2s;
+}
+
+.btn:hover{
+  background:#16213e;
+}
+
+.btn-green{
+  background:#2e7d32;
+}
+
+.btn-green:hover{
+  background:#1b5e20;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+
+.info-box{
+  background:#f8f9ff;
+  border-left:4px solid #0f3460;
+  padding:14px;
+  border-radius:0 8px 8px 0;
+}
+
+.info-box h4{
+  margin-bottom:8px;
+  color:#0f3460;
+}
+
+.hint{
+  color:#666;
+  font-size:.82rem;
+  margin-top:5px;
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#777;
+  font-size:.8rem;
+  margin-top:24px;
+}
+
+/* LOGIN SYSTEM */
+
+#lms-login-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#0f172a 100%);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  font-family:'Segoe UI',sans-serif;
+}
+
+#lms-login-overlay.active{
+  display:flex;
+}
+
+.lms-login-box{
+  background:#fff;
+  border-radius:18px;
+  padding:40px 36px;
+  width:360px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  text-align:center;
+}
+
+.lms-logo{
+  font-size:2rem;
+  margin-bottom:4px;
+}
+
+.lms-login-box h2{
+  color:#0f172a;
+  margin-bottom:6px;
+}
+
+.lms-subtitle{
+  color:#64748b;
+  font-size:.78rem;
+  margin-bottom:24px;
+}
+
+.lms-login-box input{
+  width:100%;
+  padding:11px 14px;
+  border:1.5px solid #dbe2ea;
+  border-radius:8px;
+  margin-bottom:12px;
+  font-size:.94rem;
+}
+
+.lms-login-box input:focus{
+  outline:none;
+  border-color:#3b82f6;
+}
+
+.lms-login-box button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#3b82f6;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.lms-login-box button:hover{
+  background:#2563eb;
+}
+
+#lms-login-error{
+  color:#e53935;
+  font-size:.82rem;
+  margin-top:10px;
+  min-height:18px;
+}
+
+.lms-page-content{
+  display:none;
+}
+
+.lms-page-content.unlocked{
+  display:block;
+}
+
+.lms-logout-btn{
+  position:fixed;
+  top:12px;
+  right:16px;
+  z-index:9999;
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding:6px 14px;
+  font-size:.8rem;
+  cursor:pointer;
+}
+
+.lms-logout-btn:hover{
+  background:#dc2626;
+}
+
+.lms-welcome-bar{
+  background:#0f172a;
+  color:#cbd5e1;
+  text-align:center;
+  padding:6px;
+  font-size:.78rem;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN SYSTEM -->
+
+<div id="lms-login-overlay" class="active">
+
+  <div class="lms-login-box">
+
+    <div class="lms-logo">🎓</div>
+
+    <h2>GJIMT B.Com(Hons) LMS</h2>
+
+    <div class="lms-subtitle">
+      B.Com(Hons) with AI Integration · 2026<br>
+      Please sign in to continue
+    </div>
+
+    <input type="text" id="lms-uid" placeholder="User ID">
+
+    <input type="password"
+      id="lms-pwd"
+      placeholder="Password"
+      onkeydown="if(event.key==='Enter')lmsDoLogin()">
+
+    <button onclick="lmsDoLogin()">
+      Sign In →
+    </button>
+
+    <div id="lms-login-error"></div>
+
+    <div style="margin-top:14px;font-size:.75rem;color:#64748b;line-height:1.6">
+      Students: <b>bcom26-ai-01</b> to <b>bcom26-ai-10</b><br>
+      Faculty: <b>bcom26-fac-shallu</b><br>
+      Admin: <b>bcom26-admin</b>
+    </div>
+
+  </div>
+
+</div>
+
+<button class="lms-logout-btn"
+id="lms-logout-btn"
+style="display:none"
+onclick="lmsLogout()">
+⏻ Sign Out
+</button>
+
+<div id="lms-welcome-bar"
+class="lms-welcome-bar"
+style="display:none"></div>
+
+<div id="lms-page-content" class="lms-page-content">
+
+<header>
+  <div>
+    <h1>GJIMT AI Lab — B.Com(Hons) Sem 1 LMS</h1>
+    <p>
+      B.Com(Hons) with AI Integration · 42-Hour Program ·
+      Aug–Nov 2026 · Batch of 10
+    </p>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html" class="active">🏠 Home</a>
+  <a href="calendar.html">📅 42-Hour Calendar</a>
+  <a href="projects.html">📁 Shadow Projects</a>
+  <a href="mock.html">📝 GSDC Mock Tests</a>
+  <a href="faculty.html">👩‍🏫 Faculty Dashboard</a>
+  <a href="users.html">🔑 User Accounts</a>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+
+  <div class="card">
+
+    <h2>
+      Welcome to B.Com(Hons) with AI Integration LMS
+    </h2>
+
+    <p style="margin-bottom:12px">
+      This LMS supports the
+      <strong>B.Com(Hons) with AI Integration Program</strong>
+      with industry-benchmarked shadow projects,
+      AI-enabled accounting analysis,
+      and GSDC certification preparation.
+    </p>
+
+    <div class="grid">
+
+      <a class="quick-card" href="calendar.html">
+        <div class="icon">📅</div>
+        <h3>42-Hour Calendar</h3>
+        <p>Weekly semester roadmap</p>
+      </a>
+
+      <a class="quick-card" href="projects.html">
+        <div class="icon">📁</div>
+        <h3>Shadow Projects</h3>
+        <p>Financial & business AI projects</p>
+      </a>
+
+      <a class="quick-card" href="mock.html">
+        <div class="icon">📝</div>
+        <h3>GSDC Mock Tests</h3>
+        <p>Certification preparation portal</p>
+      </a>
+
+      <a class="quick-card" href="faculty.html">
+        <div class="icon">👩‍🏫</div>
+        <h3>Faculty Dashboard</h3>
+        <p>Rubrics, evaluation & answer keys</p>
+      </a>
+
+      <a class="quick-card" href="users.html">
+        <div class="icon">🔑</div>
+        <h3>User Accounts</h3>
+        <p>Student & faculty access</p>
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- PROGRAM OVERVIEW -->
+
+  <div class="card">
+
+    <h2>📘 Program Overview</h2>
+
+    <table>
+
+      <tr>
+        <th>Item</th>
+        <th>Details</th>
+      </tr>
+
+      <tr>
+        <td>Program</td>
+        <td>B.Com(Hons) with AI Integration — Semester 1</td>
+      </tr>
+
+      <tr>
+        <td>Duration</td>
+        <td>42 Contact Hours · August – November 2026</td>
+      </tr>
+
+      <tr>
+        <td>Faculty In-Charge</td>
+        <td>Dr. Shallu</td>
+      </tr>
+
+      <tr>
+        <td>Cohort Size</td>
+        <td>10 Students</td>
+      </tr>
+
+      <tr>
+        <td>GSDC Certification</td>
+        <td>GSDC Generative AI Foundation Certification</td>
+      </tr>
+
+      <tr>
+        <td>Semester Focus</td>
+        <td>Accounting, financial interpretation, business cost analysis & AI-assisted reasoning</td>
+      </tr>
+
+      <tr>
+        <td>Core Subjects</td>
+        <td>Financial Accounting, Business Economics, Business Mathematics, Commerce Foundations</td>
+      </tr>
+
+      <tr>
+        <td>AI Tools Used</td>
+        <td>ChatGPT, Excel AI, Grammarly AI, Canva AI, Power BI</td>
+      </tr>
+
+      <tr>
+        <td>Mock Tests</td>
+        <td>Weekly module-wise MCQ + scenario-based assessments</td>
+      </tr>
+
+      <tr>
+        <td>Doubt Sessions</td>
+        <td>Every Saturday — AI + GSDC Support Sessions</td>
+      </tr>
+
+    </table>
+
+  </div>
+
+  <!-- SHADOW PROJECTS -->
+
+  <div class="card">
+
+    <h2>📁 Benchmarked Shadow Projects</h2>
+
+    <div class="phase-box finance">
+      <h3>
+        <span class="badge badge-proj">PROJECT 1</span>
+        Financial Statement Interpretation (Tata Group)
+      </h3>
+
+      <ul>
+        <li>Analyse income statement and balance sheet</li>
+        <li>Identify profitability and financial health trends</li>
+        <li>Create ratio interpretation tables using Excel AI</li>
+        <li>Prepare executive financial insights presentation</li>
+      </ul>
+
+      <p class="hint">
+        AI Tools: ChatGPT · Excel AI · Canva AI
+      </p>
+    </div>
+
+    <div class="phase-box ai">
+      <h3>
+        <span class="badge badge-ai">PROJECT 2</span>
+        Business Cost Classification Study (ITC)
+      </h3>
+
+      <ul>
+        <li>Classify fixed, variable & semi-variable costs</li>
+        <li>Prepare cost behaviour analysis tables</li>
+        <li>Use AI to simplify cost concepts</li>
+        <li>Generate business recommendations</li>
+      </ul>
+
+      <p class="hint">
+        AI Tools: ChatGPT · Excel AI
+      </p>
+    </div>
+
+  </div>
+
+  <!-- AI TOOLS -->
+
+  <div class="card">
+
+    <h2>🤖 AI Tools Integrated in Semester 1</h2>
+
+    <div class="info-grid">
+
+      <div class="info-box">
+        <h4>💬 ChatGPT / Gemini</h4>
+        <p>Concept explanation, accounting reasoning & business analysis</p>
+      </div>
+
+      <div class="info-box">
+        <h4>📊 Excel AI</h4>
+        <p>Financial tables, trends, ratio calculations & analysis</p>
+      </div>
+
+      <div class="info-box">
+        <h4>📝 Grammarly AI</h4>
+        <p>Professional report writing & communication improvement</p>
+      </div>
+
+      <div class="info-box">
+        <h4>🎨 Canva AI</h4>
+        <p>Business presentations & infographic design</p>
+      </div>
+
+      <div class="info-box">
+        <h4>📈 Power BI</h4>
+        <p>Basic dashboards & accounting visualizations</p>
+      </div>
+
+      <div class="info-box">
+        <h4>📑 Google Workspace AI</h4>
+        <p>Summaries, documentation & collaboration</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- QUICK LINKS -->
+
+  <div class="card">
+
+    <h2>🚀 Quick Links</h2>
+
+    <a class="btn"
+      href="calendar.html">
+      Open Semester Calendar
+    </a>
+
+    <a class="btn"
+      href="projects.html">
+      View Shadow Projects
+    </a>
+
+    <a class="btn btn-green"
+      href="mock.html">
+      Start GSDC Mock Test
+    </a>
+
+  </div>
+
+</div>
+
+<footer>
+© 2026 GJIMT AI Lab · B.Com(Hons) with AI Integration · Powered by GitHub Pages
+</footer>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+// LMS AUTH SYSTEM
+// ─────────────────────────────────────────────────────
+
+(function(){
+
+  var USERS = {
+
+    'bcom26-ai-01':'student@2026',
+    'bcom26-ai-02':'student@2026',
+    'bcom26-ai-03':'student@2026',
+    'bcom26-ai-04':'student@2026',
+    'bcom26-ai-05':'student@2026',
+    'bcom26-ai-06':'student@2026',
+    'bcom26-ai-07':'student@2026',
+    'bcom26-ai-08':'student@2026',
+    'bcom26-ai-09':'student@2026',
+    'bcom26-ai-10':'student@2026',
+
+    'bcom26-fac-shallu':'faculty@2026',
+
+    'bcom26-admin':'admin@2026'
+  };
+
+  var ROLES = {
+
+    'bcom26-ai-01':'student',
+    'bcom26-ai-02':'student',
+    'bcom26-ai-03':'student',
+    'bcom26-ai-04':'student',
+    'bcom26-ai-05':'student',
+    'bcom26-ai-06':'student',
+    'bcom26-ai-07':'student',
+    'bcom26-ai-08':'student',
+    'bcom26-ai-09':'student',
+    'bcom26-ai-10':'student',
+
+    'bcom26-fac-shallu':'faculty',
+
+    'bcom26-admin':'admin'
+  };
+
+  var ALLOWED = ['student','faculty','admin'];
+
+  function getSession(){
+    try{
+      return JSON.parse(
+        sessionStorage.getItem('lmsSession') || 'null'
+      );
+    }catch(e){
+      return null;
+    }
+  }
+
+  function setSession(uid,role){
+
+    sessionStorage.setItem(
+      'lmsSession',
+      JSON.stringify({
+        uid:uid,
+        role:role
+      })
+    );
+  }
+
+  function clearSession(){
+    sessionStorage.removeItem('lmsSession');
+  }
+
+  function unlock(session){
+
+    document.getElementById('lms-login-overlay')
+      .classList.remove('active');
+
+    document.getElementById('lms-logout-btn')
+      .style.display='block';
+
+    let wb=document.getElementById('lms-welcome-bar');
+
+    wb.style.display='block';
+
+    wb.textContent=
+      'Signed in as: '+
+      session.uid+
+      ' ('+session.role+') | B.Com(Hons) with AI Integration 2026';
+
+    document.getElementById('lms-page-content')
+      .classList.add('unlocked');
+  }
+
+  window.lmsDoLogin=function(){
+
+    let uid=(document.getElementById('lms-uid').value || '')
+      .trim()
+      .toLowerCase();
+
+    let pwd=document.getElementById('lms-pwd').value || '';
+
+    let err=document.getElementById('lms-login-error');
+
+    if(!USERS[uid]){
+
+      err.textContent='❌ User ID not found.';
+      return;
+    }
+
+    if(USERS[uid]!==pwd){
+
+      err.textContent='❌ Incorrect password.';
+      return;
+    }
+
+    let role=ROLES[uid];
+
+    if(ALLOWED.indexOf(role)===-1){
+
+      err.textContent='⛔ Access denied.';
+      return;
+    }
+
+    setSession(uid,role);
+
+    unlock({
+      uid:uid,
+      role:role
+    });
+  };
+
+  window.lmsLogout=function(){
+
+    clearSession();
+
+    document.getElementById('lms-login-overlay')
+      .classList.add('active');
+
+    document.getElementById('lms-logout-btn')
+      .style.display='none';
+
+    document.getElementById('lms-welcome-bar')
+      .style.display='none';
+
+    document.getElementById('lms-page-content')
+      .classList.remove('unlocked');
+
+    document.getElementById('lms-uid').value='';
+
+    document.getElementById('lms-pwd').value='';
+
+    document.getElementById('lms-login-error')
+      .textContent='';
+  };
+
+  let session=getSession();
+
+  if(
+    session &&
+    USERS[session.uid] &&
+    ROLES[session.uid]===session.role
+  ){
+    unlock(session);
+  }
+
+})();
+</script>
+
+</body>
+</html>
